@@ -1,0 +1,8 @@
+#!/bin/bash
+set -e
+
+# postgresユーザーで一般ユーザー作成、他
+psql -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" <<-EOSQL
+	CREATE DATABASE ${DB_DATABASE};
+	GRANT ALL PRIVILEGES ON DATABASE ${DB_DATABASE} TO ${POSTGRES_USER};
+EOSQL

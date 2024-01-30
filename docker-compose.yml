@@ -1,0 +1,34 @@
+volumes:
+  db-store:
+services:
+  app:
+    build: ./.docker/php
+    volumes:
+      - ./laravel:/usr/src/laravel:cached
+    environment:
+      DB_CONNECTION: pgsql
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_DATABASE: sample
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+    tty: true
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    build: ./.docker/postgres
+    volumes:
+      - db-store:/var/lib/postgresql
+      - ./.docker/postgres/initdb.d:/docker-entrypoint-initdb.d
+    ports:
+      - 5432:5432
+    environment:
+      DB_DATABASE: sample
+      POSTGRES_PASSWORD: postgres
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
