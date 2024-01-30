@@ -22,6 +22,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read string $name_and_email1 ユーザー名とパスワードを連結して取得1
+ * @property-read string $name_and_email2 ユーザー名とパスワードを連結して取得2
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
@@ -95,7 +96,7 @@ class User extends Authenticatable
     protected function nameAndEmail2(): Attribute
     {
         return Attribute::make(
-            get: fn () => "{$this->name} {$this->email}",
+            get: fn (): string => "{$this->name} {$this->email}",
         );
     }
 }
